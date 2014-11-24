@@ -27,6 +27,14 @@ module Rack
           super
         end
 
+        def redirect_count
+          self[:redirect_count]
+        end
+
+        def timings
+          self[:timings]
+        end
+
         def self.init_from_form_data(env, page_struct)
           timings = []
           clientTimes, clientPerf, baseTime = nil
@@ -37,7 +45,7 @@ module Rack
           baseTime    = clientTimes['navigationStart'].to_i if clientTimes
           return unless clientTimes && baseTime
 
-          probes = form['clientProbes']
+          probes     = form['clientProbes']
           translated = {}
           if probes && !["null", ""].include?(probes)
             probes.each do |id, val|
@@ -71,8 +79,8 @@ module Rack
           end
 
           TimerStruct::Client.new.tap do |rval|
-            rval['RedirectCount'] = env['rack.request.form_hash']['clientPerformance']['navigation']['redirectCount']
-            rval['Timings']       = timings
+            rval[:redirect_count] = env['rack.request.form_hash']['clientPerformance']['navigation']['redirect_count']
+            rval[:timings]        = timings
           end
         end
       end
