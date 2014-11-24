@@ -11,14 +11,14 @@ describe Rack::MiniProfiler::TimerStruct::Base do
   end
 
   it 'allows us to set any attribute we want' do
-    @timer['Hello'] = 'World'
-    @timer['Hello'].should == 'World'
+    @timer[:hello] = 'World'
+    @timer[:hello].should == 'World'
   end
 
   describe 'to_json' do
 
     before do
-      @timer['IceIce'] = 'Baby'
+      @timer[:ice_ice] = 'Baby'
       @json = @timer.to_json
     end
 
@@ -42,7 +42,7 @@ describe Rack::MiniProfiler::TimerStruct::Base do
       end
 
       it 'has the element we added' do
-        @deserialized['IceIce'].should == 'Baby'
+        @deserialized['ice_ice'].should == 'Baby'
       end
     end
 
