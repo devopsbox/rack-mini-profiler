@@ -157,14 +157,14 @@ describe Rack::MiniProfiler do
       before :each do
         Rack::MiniProfiler.config.disable_caching = false
       end
- 
+
       it "should strip if-modified-since on the way in" do
         old_time = 1409326086
         get '/cached-resource', {}, {'HTTP_IF_MODIFIED_SINCE' => old_time}
         last_response.status.should equal(304)
       end
 
-   
+
       it "should be able to re-enable caching" do
         get '/cached-resource'
         last_response.headers['Cache-Control'].should_not include('no-store')
@@ -202,7 +202,7 @@ describe Rack::MiniProfiler do
     it "omits db backtrace if requested" do
       get '/db?pp=no-backtrace'
       prof = load_prof(last_response)
-      stack = prof["Root"]["SqlTimings"][0]["StackTraceSnippet"]
+      stack = prof[:root][:sql_timings][0][:stack_trace_snippet]
       stack.should be_nil
     end
 
