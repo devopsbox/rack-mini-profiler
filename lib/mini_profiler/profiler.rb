@@ -40,7 +40,7 @@ module Rack
         self.current               = Context.new
         self.current.inject_js     = config.auto_inject && (!env['HTTP_X_REQUESTED_WITH'].eql? 'XMLHttpRequest')
         self.current.page_struct   = TimerStruct::Page.new(env)
-        self.current.current_timer = current.page_struct['Root']
+        self.current.current_timer = current.page_struct[:root]
       end
 
       def authorize_request
@@ -310,8 +310,8 @@ module Rack
       end
 
       page_struct = current.page_struct
-      page_struct['User'] = user(env)
-      page_struct['Root'].record_time((Time.now - start) * 1000)
+      page_struct[:user] = user(env)
+      page_struct[:root].record_time((Time.now - start) * 1000)
 
       if flamegraph
         body.close if body.respond_to? :close
