@@ -9,15 +9,15 @@ describe Rack::MiniProfiler::TimerStruct::Custom do
   end
 
   it 'has an type' do
-    @custom['Type'].should_not be_nil
+    @custom[:type].should_not be_nil
   end
 
   it 'has a dur milliseconds' do
-    @custom['DurationMilliseconds'].should_not be_nil
+    @custom[:duration_milliseconds].should_not be_nil
   end
 
-  it 'has a StartMilliseconds' do
-    @custom['StartMilliseconds'].should_not be_nil
+  it 'has a start_milliseconds' do
+    @custom[:start_milliseconds].should_not be_nil
   end
 
   describe 'to_json' do
@@ -27,7 +27,7 @@ describe Rack::MiniProfiler::TimerStruct::Custom do
     end
 
     it 'has a DurationMilliseconds element' do
-      @deserialized['DurationMilliseconds'].should_not be_nil
+      @deserialized['duration_milliseconds'].should_not be_nil
     end
   end
 
