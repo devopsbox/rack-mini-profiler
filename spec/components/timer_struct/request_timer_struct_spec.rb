@@ -12,15 +12,15 @@ describe Rack::MiniProfiler::TimerStruct::Request do
   end
 
   it 'sets IsRoot to true' do
-    @request['IsRoot'].should be_true
+    @request[:is_root].should be_true
   end
 
   it 'has an Id' do
-    @request['Id'].should_not be_nil
+    @request[:id].should_not be_nil
   end
 
   it 'has a Root' do
-    @request['Name'].should == @name
+    @request[:name].should == @name
   end
 
   it 'begins with a children duration of 0' do
@@ -28,15 +28,15 @@ describe Rack::MiniProfiler::TimerStruct::Request do
   end
 
   it 'has a false HasChildren attribute' do
-    @request['HasChildren'].should be_false
+    @request[:has_children].should be_false
   end
 
   it 'has an empty Children attribute' do
-    @request['Children'].should be_empty
+    @request.children.should be_empty
   end
 
   it 'has a depth of 0' do
-    @request['Depth'].should == 0
+    @request.depth.should == 0
   end
 
   it "has start time" do
@@ -44,15 +44,15 @@ describe Rack::MiniProfiler::TimerStruct::Request do
   end
 
   it 'has a false HasSqlTimings attribute' do
-    @request['HasSqlTimings'].should be_false
+    @request[:has_sql_timings].should be_false
   end
 
   it 'has no sql timings at first' do
-    @request['SqlTimings'].should be_empty
+    @request[:sql_timings].should be_empty
   end
 
-  it 'has a 0 for SqlTimingsDurationMilliseconds' do
-    @request['SqlTimingsDurationMilliseconds'].should == 0
+  it 'has a 0 for sql_timings_duration_milliseconds' do
+    @request[:sql_timings_duration_milliseconds].should == 0
   end
 
   describe 'add SQL' do
@@ -63,23 +63,23 @@ describe Rack::MiniProfiler::TimerStruct::Request do
     end
 
     it 'has a true HasSqlTimings attribute' do
-      @request['HasSqlTimings'].should be_true
+      @request[:has_sql_timings].should be_true
     end
 
     it 'has the SqlTiming object' do
-      @request['SqlTimings'].should_not be_empty
+      @request.sql_timings.should_not be_empty
     end
 
     it 'has a child with the ParentTimingId of the request' do
-      @request['SqlTimings'][0]['ParentTimingId'].should == @request['Id']
+      @request.sql_timings[0]['ParentTimingId'].should == @request['Id']
     end
 
-    it 'increases SqlTimingsDurationMilliseconds' do
-      @request['SqlTimingsDurationMilliseconds'].should == 77
+    it 'increases sql_timings_duration_milliseconds' do
+      @request[:sql_timings_duration_milliseconds].should == 77
     end
 
     it "increases the page's " do
-      @page['DurationMillisecondsInSql'].should == 77
+      @page[:duration_milliseconds_in_sql].should == 77
     end
 
   end
@@ -104,24 +104,24 @@ describe Rack::MiniProfiler::TimerStruct::Request do
         @child.record_time(1111)
       end
 
-      it 'has a IsRoot value of false' do
-        @child['IsRoot'].should be_false
+      it 'has a is_root value of false' do
+        @child[:is_root].should be_false
       end
 
       it 'has a true HasChildren attribute' do
-        @request['HasChildren'].should be_true
+        @request[:has_children].should be_true
       end
 
       it 'has the child in the Children attribute' do
-        @request['Children'].should == [@child]
+        @request[:children].should == [@child]
       end
 
       it 'assigns its Id to the child' do
-        @child['ParentTimingId'].should == @request['Id']
+        @child[:parent_timing_id].should == @request[:id]
       end
 
       it 'assigns a depth of 1 to the child' do
-        @child['Depth'].should == 1
+        @child[:depth].should == 1
       end
 
       it 'increases the children duration' do
@@ -130,7 +130,7 @@ describe Rack::MiniProfiler::TimerStruct::Request do
 
       it 'marks short timings as trivial' do
         @request.record_time(1)
-        @request['IsTrivial'].should be_true
+        @request[:is_trivial].should be_true
       end
 
 
@@ -140,15 +140,15 @@ describe Rack::MiniProfiler::TimerStruct::Request do
         end
 
         it "is not a trivial query" do
-          @request['IsTrivial'].should be_false
+          @request[:is_trivial].should be_false
         end
 
         it 'has stores the recorded time in DurationMilliseconds' do
-          @request['DurationMilliseconds'].should == 1234
+          @request.duration_ms.should == 1234
         end
 
         it 'calculates DurationWithoutChildrenMilliseconds without the children timings' do
-          @request['DurationWithoutChildrenMilliseconds'].should == 123
+          @request[:duration_without_children_milliseconds].should == 123
         end
 
       end
